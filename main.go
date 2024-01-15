@@ -1,19 +1,30 @@
 package main
+
 import (
-    "fmt"
-    "log"
-    "net/http"
+	"fmt"
+	"net/http"
 )
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {   
-    fmt.Fprintf(w, "World!")
-}
-
-
 func main() {
-    http.HandleFunc("/hello", helloHandler)
-    fmt.Printf("Starting server at port 8080\n")
-    if err := http.ListenAndServe(":8080", nil); err != nil {
-        log.Fatal(err)
-    }
+	// Define a route handler function
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, this is the response from the server!")
+	}
+
+	// Register the route handler function with the default ServeMux
+	http.HandleFunc("/", handler)
+	
+	http.HandleFunc("/hello", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hello, World !")
+	})
+
+	// Specify the port to listen on
+	port := 3000
+
+	// Start the server and listen for incoming requests
+	fmt.Printf("Server is running on :%d...\n", port)
+	err := http.ListenAndServe(fmt.Sprintf("0.0.0.0:%d", port), nil)
+	if err != nil {
+		fmt.Println("Error:", err)
+	}
 }
