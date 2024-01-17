@@ -4,14 +4,13 @@ import (
 	"flag"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func main() {
-	// Specify the default port
-	defaultPort := 3000
 
 	// Parse the port flag
-	portPtr := flag.Int("port", defaultPort, "server port to listen on")
+	portPtr := flag.String("port", os.Getenv("PORT"), "server address to listen on")
 	flag.Parse()
 
 	// Start the server and listen for incoming requests
@@ -20,7 +19,8 @@ func main() {
 	})
 
 	// Construct the server address
-	serverAddr := fmt.Sprintf(":%d", *portPtr)
+	fmt.Println("This is the port: ", *portPtr)
+	serverAddr := fmt.Sprintf("0.0.0.0:%s", *portPtr)
 
 	fmt.Printf("Server is running on %s...\n", serverAddr)
 
